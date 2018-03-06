@@ -9,7 +9,7 @@ setup(
     author = 'Nicolas Mota',
     author_email = 'nicolas_mota@me.com',
     url = 'https://github.com/nicolasmota/simple_retry',
-    download_url ='https://github.com/nicolasmota/simple_retry/archive/0.1.tar.gz',
+    download_url ='https://github.com/nicolasmota/simple_retry/archive/0.1.1.tar.gz',
     keywords = ['retry', 'decorator', 'http', 'requests'],
     classifiers = [],
 )
