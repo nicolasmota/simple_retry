@@ -14,8 +14,7 @@ def retry(Except, retries=5, delay=0, logger=None, level='info'):
                 try:
                     return function(*args, **kwargs)
                 except Except as e:
-                    msg = '{e}, Retrying {tries} of '
-                    '{retries}'.format(
+                    msg = '{e}, Retrying {tries} of {retries}'.format(
                         e=e,
                         tries=tries,
                         retries=retries
