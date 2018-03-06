@@ -1,12 +1,15 @@
 from __future__ import absolute_import, unicode_literals
 
+import logging
 import mock
 import pytest
 
 from ..simple_retry.decorators import retry
 
+logger = logging.getLogger(__file__)
 
-@retry(Exception, retries=5)
+
+@retry(Exception, retries=5, delay=1, logger=logger)
 def funct_retried():
     import os
     os.urandom()
