@@ -3,7 +3,7 @@ import time
 from functools import wraps
 
 
-def retry(Except, retries=5, delay=3, logger=None):
+def retry(Except, retries=5, delay=0, logger=None, level='info'):
 
     def deco_retry(function):
 
@@ -13,13 +13,19 @@ def retry(Except, retries=5, delay=3, logger=None):
             while tries < retries:
                 try:
                     return function(*args, **kwargs)
-                except Except,  e:
-                    msg = "%s, Retrying in %d seconds..." % (str(e), delay)
+                except Except as e:
+                    msg = '{e}, Retrying {tries} of '
+                    '{retries}'.format(
+                        e=e,
+                        tries=tries,
+                        retries=retries
+                    )
+                    if delay:
+                        msg = ' '.join([msg, 'in {} seconds...'.format(delay)])
                     if logger:
-                        logger.warning(msg)
+                        getattr(logger, level)(msg)
                     time.sleep(delay)
                     tries += 1
             return function(*args, **kwargs)
         return f_retry
     return deco_retry
-
