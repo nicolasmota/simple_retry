@@ -33,3 +33,26 @@ def func():
   logger: Logger object that will be used to log (optional, default: None)
   level: Log level to log in, example: info, warning, error, exception, critical (default: info)
 ```
+
+
+```
+  Except: Exception that will be raised for retry (required)
+  retries: Number of retries to be executed (default: 5)
+  delay: Waiting time between each execution (default: 0)
+  logger: Logger object that will be used to log (optional, default: None)
+  level: Log level to log in, example: info, warning, error, exception, critical (default: info)
+```
+
+## Running project
+
+1. Install requirements
+
+```bash
+pip install -r requirements-dev.txt
+```
+
+2. Run tests
+
+```bash
+pytest
+```
