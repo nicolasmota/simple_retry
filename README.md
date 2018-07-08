@@ -13,7 +13,7 @@ pip install simple-retry
 ## Simple usage
 
 To use the lib you just import the decorator and add on top of the function that you want to retry
-```
+```python
 import requests
 
 from simple_retry.decorators import retry
@@ -21,7 +21,28 @@ from simple_retry.decorators import retry
 @retry(Except=requests.RequestException, retries=5, delay=1)
 def func():
     response = requests.get('http://fooo.bar')
-    response.raise_for_status()
+    response.raise_for_status()
+```
+
+### Coroutines
+```python
+import asyncio
+from simple_retry.decorators import coroutine_retry
+
+@coroutine_retry(Except=Exception, retries=5, delay=1)
+@asyncio.coroutine
+def coroutine_func():
+    yield from (asyncio.sleep(1))
+```
+
+### Async
+```python
+import asyncio
+from simple_retry.decorators import async_retry
+
+@async_retry(Except=Exception, retries=5, delay=1)
+async def async_func():
+    await asyncio.sleep(1)
 ```
 
 ## Parameters
