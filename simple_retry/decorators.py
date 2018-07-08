@@ -56,7 +56,7 @@ def coroutine_retry(Except, retries=5, delay=0, logger=None, level='info', multi
                         msg = ' '.join([msg, 'in {} seconds...'.format(mdelay)])
                     if logger:
                         getattr(logger, level)(msg)
-                    time.sleep(mdelay)
+                    yield from (asyncio.sleep(mdelay))
                     mdelay *= multiple
                     tries += 1
             return (yield from function(*args, **kwargs))
