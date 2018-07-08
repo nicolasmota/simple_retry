@@ -43,9 +43,13 @@ class TestCoroutineSimpleRetryDecorator:
         assert mock_fun.call_count == 5
 
 
+async def dumb_async_function():
+    await asyncio.Future()
+
+
 @async_retry(Exception, retries=5, delay=1, logger=logger)
 async def async_func_retried():
-    await asyncio.sleep(1)
+    await dumb_async_function()
     raise Exception('test')
 
 
@@ -53,11 +57,11 @@ class TestAsyncSimpleRetryDecorator:
 
     @pytest.mark.asyncio
     async def test_async_retries_n_times(self):
-        with mock.patch.object(asyncio, 'sleep') as mock_fun:
+        with mock.patch.object(asyncio, 'Future') as mock_fun:
             mock_coro = mock.Mock(name='result', return_value=True)
             mock_fun.side_effect = asyncio.coroutine(mock_coro)
 
             with pytest.raises(Exception):
-                await async_func_retried()
+                await (async_func_retried())
 
         assert mock_fun.call_count == 5
