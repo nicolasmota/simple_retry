@@ -56,9 +56,37 @@ def coroutine_retry(Except, retries=5, delay=0, logger=None, level='info', multi
                         msg = ' '.join([msg, 'in {} seconds...'.format(mdelay)])
                     if logger:
                         getattr(logger, level)(msg)
-                    time.sleep(mdelay)
+                    yield from (asyncio.sleep(mdelay))
                     mdelay *= multiple
                     tries += 1
             return (yield from function(*args, **kwargs))
+        return f_retry
+    return deco_retry
+
+
+def async_retry(Except, retries=5, delay=0, logger=None, level='info', multiple=1):
+    def deco_retry(function):
+
+        @wraps(function)
+        async def f_retry(*args, **kwargs):
+            tries = 1
+            mdelay = delay
+            while tries < retries:
+                try:
+                    return await (function(*args, **kwargs))
+                except Except as e:
+                    msg = '{e}, Retrying {tries} of {retries}'.format(
+                        e=e,
+                        tries=tries,
+                        retries=retries
+                    )
+                    if mdelay:
+                        msg = ' '.join([msg, 'in {} seconds...'.format(mdelay)])
+                    if logger:
+                        getattr(logger, level)(msg)
+                    await (asyncio.sleep(mdelay))
+                    mdelay *= multiple
+                    tries += 1
+            return await (function(*args, **kwargs))
         return f_retry
     return deco_retry
